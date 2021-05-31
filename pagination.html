@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta content="initial-scale=1, maximum-scale=1, user-scalable=0" name="viewport" />
+  <meta name="viewport" content="width=device-width" />
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://pagination.js.org/dist/2.1.4/pagination.min.js"></script>
+  <link rel="stylesheet" href="https://pagination.js.org/dist/2.1.4/pagination.css" />
+  <script src="https://kit.fontawesome.com/378e64f1f4.js" crossorigin="anonymous"></script>
+  <!-- <link rel="stylesheet" href="pagination.css"> -->
+</head>
+<style>
+  #pagesControllers {
+    /* border: 1px solid red; */
+    position: relative;
+  }
+
+  .pagecontroller-n,
+  .pagecontroller-p {
+    font-size: 40px;
+    border: none;
+    background-color: white;
+    ;
+  }
+
+  .pagecontroller-n {
+    color: black;
+    position: absolute;
+    right: 10px;
+    top: 7px;
+  }
+
+  .pagecontroller-num {
+    color: black;
+    padding: 5px;
+    margin: 10px;
+    border: none;
+    background-color: white;
+    font-size: 21px;
+    ;
+    /* position: absolute;
+  right:0px; */
+  }
+
+  /* .table-striped {
+    border: none;
+    background-color: red;
+  } */
+
+  .pagecontroller-p {
+    color: black;
+    position: absolute;
+    left: 10px;
+    top: 7px;
+  }
+</style>
+
+<body>
+  <div class="container">
+    <div class="row" style="padding-top: 20px;">
+      <div class="col-sm-8">
+        <h1><span
+            style=" font-size: 38px;padding-left: 5px;padding-right:7px;word-spacing: 1px;"><strong>Filter</strong></span><span
+            style=" color:rgb(193, 189, 189);"><strong>airports</strong></span>
+        </h1>
+      </div>
+      <div class="col-sm-4">
+        <div style="font-size: 25px;float: right;padding-top:25px;padding-right:20px;"><i class="fas fa-th-large"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="padding-top: 25px;" style="background-color: white;border: none;">
+      <div class="col-sm-7">
+        <span style="padding-bottom: 20px;font-size:27px;padding-left: 12px;"><strong>Type</strong></span><br>
+        <nav class="navbar navbar-default" style="background-color: white;border: none">
+          <div class="container-fluid" style="background-color: white;border: none">
+            <ul class="nav navbar-nav" style="padding-left: 0px;" style="background-color: white;">
+              <li style="padding-right: 13px;">
+                <div class="checkbox">
+                  <label><input type="checkbox"> Small </label>
+                </div>
+              </li>
+              <li style="padding-right: 13px;">
+                <div class="checkbox">
+                  <label><input type="checkbox"> Medium </label>
+                </div>
+              </li>
+              <li style="padding-right: 13px;">
+                <div class="checkbox">
+                  <label><input type="checkbox"> Large </label>
+                </div>
+              </li>
+              <li style="padding-right: 13px;">
+                <div class="checkbox">
+                  <label><input type="checkbox"> Heliport </label>
+                </div>
+              </li>
+              <li style="padding-right: 13px;">
+                <div class="checkbox">
+                  <label><input type="checkbox"> Closed </label>
+                </div>
+              </li>
+              <li style="padding-right: 13px;">
+                <div class="checkbox">
+                  <label><input type="checkbox"> In your favourites </label>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <div class="col-sm-5">
+        <div style="padding-top:5px;font-size: 25px;"><strong>Filter by search</strong></div>
+        <div class="form-group" style="padding-top: 5px;">
+          <input type="text" class="form-control" id="search-input" placeholder="Search"
+            style="background: none; outline: none; border-bottom: 1px solid black;border-top: none;border-left: none;border-right: 0;">
+        </div>
+      </div>
+    </div>
+
+    <div class="row" id="list">
+      <div class="col-sm-12" style="background-color:rgb(255, 255, 255);">
+        <table class="table table-striped table-heading" id="tablemanager" style="padding: 10px;border:1px solid sred">
+          <thead style="background-color:rgb(216, 216, 216); padding-top: 15px;">
+            <tr style="padding: 5px;height: 40px;">
+              <th>Name</th>
+              <th>ICAO</th>
+              <th>IATA</th>
+              <th>Elev</th>
+              <th>Lat.</th>
+              <th>Long.</th>
+              <th>Type</th>
+            </tr>
+          </thead>
+          <tbody id="result_table">
+
+          </tbody>
+
+        </table>
+      </div>
+    </div>
+
+    <!-- <div class="row" style="padding-top:10px;">
+      <div class="col-sm-1" style="background-color:rgb(255, 255, 255);">
+        <i class="fas fa-arrow-left" style="font-size: 46px;"></i>
+      </div>
+      <div class="col-sm-2" style="background-color:rgb(255, 255, 255);"></div>
+      <div class="col-sm-6" style="background-color:rgb(255, 255, 255);">
+        <div style="padding: 10px 0px;text-align: center;">Showing result</div>
+      </div>
+      <div class="col-sm-2" style="background-color:rgb(255, 255, 255);"></div>
+      <div class="col-sm-1" style="background-color:rgb(255, 255, 255);"> <i class="fas fa-arrow-right"
+          style="font-size: 46px;"></i></div>
+
+    </div> -->
+  </div>
+
+  </div>
+
+  <script>
+    var myarr = [{
+      "id": 1,
+      "name": "Goroka Airport",
+      "city": "Goroka",
+      "country": "Papua New Guinea",
+      "iata": "GKA",
+      "icao": "AYGA",
+      "latitude": -6.081689834590001,
+      "longitude": 145.391998291,
+      "altitude": 5282,
+      "timezone": 10,
+      "dst": "U",
+      "tz": "Pacific/Port_Moresby",
+      "type": "large",
+      "source": "OurAirports",
+      "elevation": 808
+    },
+    {
+      "id": 2,
+      "name": "Madang Airport",
+      "city": "Madang",
+      "country": "Papua New Guinea",
+      "iata": "MAG",
+      "icao": "AYMD",
+      "latitude": -5.20707988739,
+      "longitude": 145.789001465,
+      "altitude": 20,
+      "timezone": 10,
+      "dst": "U",
+      "tz": "Pacific/Port_Moresby",
+      "type": "large",
+      "source": "OurAirports",
+      "elevation": 808
+    },
+    {
+      "id": 3,
+      "name": "Mount Hagen Kagamuga Airport",
+      "city": "Mount Hagen",
+      "country": "Papua New Guinea",
+      "iata": "HGU",
+      "icao": "AYMH",
+      "latitude": -5.826789855957031,
+      "longitude": 144.29600524902344,
+      "altitude": 5388,
+      "timezone": 10,
+      "dst": "U",
+      "tz": "Pacific/Port_Moresby",
+      "type": "small",
+      "source": "OurAirports",
+      "elevation": 808
+    },
+    {
+      "id": 4,
+      "name": "Nadzab Airport",
+      "city": "Nadzab",
+      "country": "Papua New Guinea",
+      "iata": "LAE",
+      "icao": "AYNZ",
+      "latitude": -6.569803,
+      "longitude": 146.725977,
+      "altitude": 239,
+      "timezone": 10,
+      "dst": "U",
+      "tz": "Pacific/Port_Moresby",
+      "type": "large",
+      "source": "OurAirports",
+      "elevation": 808
+    },
+    {
+      "id": 5,
+      "name": "Port Moresby Jacksons International Airport",
+      "city": "Port Moresby",
+      "country": "Papua New Guinea",
+      "iata": "POM",
+      "icao": "AYPY",
+      "latitude": -9.443380355834961,
+      "longitude": 147.22000122070312,
+      "altitude": 146,
+      "timezone": 10,
+      "dst": "U",
+      "tz": "Pacific/Port_Moresby",
+      "type": "small",
+      "source": "OurAirports",
+      "elevation": 808
+    },
+    {
+      "id": 6,
+      "name": "Wewak International Airport",
+      "city": "Wewak",
+      "country": "Papua New Guinea",
+      "iata": "WWK",
+      "icao": "AYWK",
+      "latitude": -3.58383011818,
+      "longitude": 143.669006348,
+      "altitude": 19,
+      "timezone": 10,
+      "dst": "U",
+      "tz": "Pacific/Port_Moresby",
+      "type": "medium",
+      "source": "OurAirports",
+      "elevation": 808
+    },
+    {
+      "id": 7,
+      "name": "Narsarsuaq Airport",
+      "city": "Narssarssuaq",
+      "country": "Greenland",
+      "iata": "UAK",
+      "icao": "BGBW",
+      "latitude": 61.1604995728,
+      "longitude": -45.4259986877,
+      "altitude": 112,
+      "timezone": -3,
+      "dst": "E",
+      "tz": "America/Godthab",
+      "type": "large",
+      "source": "OurAirports",
+      "elevation": 808
+    },
+    {
+      "id": 8,
+      "name": "Godthaab / Nuuk Airport",
+      "city": "Godthaab",
+      "country": "Greenland",
+      "iata": "GOH",
+      "icao": "BGGH",
+      "latitude": 64.19090271,
+      "longitude": -51.6781005859,
+      "altitude": 283,
+      "timezone": -3,
+      "dst": "E",
+      "tz": "America/Godthab",
+      "type": "small",
+      "source": "OurAirports",
+      "elevation": 808
+    },
+    {
+      "id": 9,
+      "name": "Kangerlussuaq Airport",
+      "city": "Sondrestrom",
+      "country": "Greenland",
+      "iata": "SFJ",
+      "icao": "BGSF",
+      "latitude": 67.0122218992,
+      "longitude": -50.7116031647,
+      "altitude": 165,
+      "timezone": -3,
+      "dst": "E",
+      "tz": "America/Godthab",
+      "type": "medium",
+      "source": "OurAirports",
+      "elevation": 808
+    },
+    {
+      "id": 10,
+      "name": "Thule Air Base",
+      "city": "Thule",
+      "country": "Greenland",
+      "iata": "THU",
+      "icao": "BGTL",
+      "latitude": 76.5311965942,
+      "longitude": -68.7032012939,
+      "altitude": 251,
+      "timezone": -4,
+      "dst": "E",
+      "tz": "America/Thule",
+      "type": "small",
+      "source": "OurAirports",
+      "elevation": 808
+    },
+    {
+      "id": 11,
+      "name": "Akureyri Airport",
+      "city": "Akureyri",
+      "country": "Iceland",
+      "iata": "AEY",
+      "icao": "BIAR",
+      "latitude": 65.66000366210938,
+      "longitude": -18.07270050048828,
+      "altitude": 6,
+      "timezone": 0,
+      "dst": "N",
+      "tz": "Atlantic/Reykjavik",
+      "type": "small",
+      "source": "OurAirports",
+      "elevation": 808
+    },
+    {
+      "id": 12,
+      "name": "Egilsstaðir Airport",
+      "city": "Egilsstadir",
+      "country": "Iceland",
+      "iata": "EGS",
+      "icao": "BIEG",
+      "latitude": 65.2833023071289,
+      "longitude": -14.401399612426758,
+      "altitude": 76,
+      "timezone": 0,
+      "dst": "N",
+      "tz": "Atlantic/Reykjavik",
+      "type": "medium",
+      "source": "OurAirports",
+      "elevation": 808
+    },
+    {
+      "id": 13,
+      "name": "Hornafjörður Airport",
+      "city": "Hofn",
+      "country": "Iceland",
+      "iata": "HFN",
+      "icao": "BIHN",
+      "latitude": 64.295601,
+      "longitude": -15.2272,
+      "altitude": 24,
+      "timezone": 0,
+      "dst": "N",
+      "tz": "Atlantic/Reykjavik",
+      "type": "large",
+      "source": "OurAirports",
+      "elevation": 808
+    },
+    {
+      "id": 14,
+      "name": "Húsavík Airport",
+      "city": "Husavik",
+      "country": "Iceland",
+      "iata": "HZK",
+      "icao": "BIHU",
+      "latitude": 65.952301,
+      "longitude": -17.426001,
+      "altitude": 48,
+      "timezone": 0,
+      "dst": "N",
+      "tz": "Atlantic/Reykjavik",
+      "type": "large",
+      "source": "OurAirports",
+      "elevation": 808
+    },
+    {
+      "id": 15,
+      "name": "Ísafjörður Airport",
+      "city": "Isafjordur",
+      "country": "Iceland",
+      "iata": "IFJ",
+      "icao": "BIIS",
+      "latitude": 66.05809783935547,
+      "longitude": -23.135299682617188,
+      "altitude": 8,
+      "timezone": 0,
+      "dst": "N",
+      "tz": "Atlantic/Reykjavik",
+      "type": "large",
+      "source": "OurAirports",
+      "elevation": 808
+    },
+    {
+      "id": 16,
+      "name": "Keflavik International Airport",
+      "city": "Keflavik",
+      "country": "Iceland",
+      "iata": "KEF",
+      "icao": "BIKF",
+      "latitude": 63.985000610352,
+      "longitude": -22.605600357056,
+      "altitude": 171,
+      "timezone": 0,
+      "dst": "N",
+      "tz": "Atlantic/Reykjavik",
+      "type": "medium",
+      "source": "OurAirports",
+      "elevation": 808
+    },
+    {
+      "id": 17,
+      "name": "Patreksfjörður Airport",
+      "city": "Patreksfjordur",
+      "country": "Iceland",
+      "iata": "PFJ",
+      "icao": "BIPA",
+      "latitude": 65.555801,
+      "longitude": -23.965,
+      "altitude": 11,
+      "timezone": 0,
+      "dst": "N",
+      "tz": "Atlantic/Reykjavik",
+      "type": "small",
+      "source": "OurAirports",
+      "elevation": 808
+    }]
+
+    $('#search-input').on('keyup', function () {
+
+      var value = $(this).val()
+      console.log('value', value)
+      var data = searchtable(value, myarr)
+      buildTable(data)
+    })
+
+    buildTable(myarr)
+
+    function searchtable(value, data) {
+      var filterdata = []
+
+      for (var i = 0; i < data.length; i++) {
+        value = value.toLowerCase()
+        var name = data[i].name.toLowerCase()
+
+        if (name.includes(value)) {
+          filterdata.push(data[i])
+        }
+      }
+
+      return filterdata
+    }
+    // buildTable(myarr)
+
+    // console.log(myarr);
+    function buildTable(data) {
+      var table = document.getElementById('result_table')
+      table.innerHTML = ''
+      for (var i = 0; i < data.length; i++) {
+        var colname = `name-${i}`
+        var colage = `icao-${i}`
+        var colbirth = `iata-${i}`
+        var colname = `elev-${i}`
+        var colage = `lat-${i}`
+        var colbirth = `long-${i}`
+        var coltest = `type-${i}`
+
+        var row = `<tr>
+                        <td>${data[i].name}</td>
+                        <td>${data[i].icao}</td>
+                        <td>${data[i].iata}</td>
+                        <td>${data[i].elevation}</td>
+                        <td>${data[i].latitude}</td>
+                        <td>${data[i].longitude}</td>
+                        <td>${data[i].type}</td>
+                   </tr>`
+        table.innerHTML += row
+      }
+    }
+  </script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+  <!-- <script type="text/javascript" src="./js/jquery-1.12.3.min.js"></script> -->
+  <script type="text/javascript" src="tableManager.js"></script>
+  <script type="text/javascript">
+    // var onetwo = Firstname;
+    // basic usage
+    $('#tablemanager').tablemanager({
+      // firstSort: [[3, 0], [2, 0], [1, 'asc']],
+      // disable: ["last"],
+      // appendFilterby: true,
+      // // dateFormat: [[4, "dd-mm-yyyy"]],
+      // // debug: true,
+      // vocabulary: {
+      //   voc_filter_by: 'Filtra per',
+      //   voc_type_here_filter: 'Scrivi qui per filtrare...',
+      //   voc_show_rows: 'Mostra righe'
+      // },
+      pagination: true,
+      showrows: [4],
+      disableFilterBy: [1]
+    });
+     // $('.tablemanager').tablemanager();
+  </script>
+</body>
+
+</html>
